@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity()
     private lateinit var buttonNext: Button
     private lateinit var progress: ProgressBar
     private lateinit var card : CardView
+    private lateinit var resultText: TextView
 
     private var questionList: ArrayList<Question> = ArrayList()
     private var number = 0
@@ -41,6 +42,7 @@ class MainActivity : AppCompatActivity()
         radioGroup = findViewById(R.id.radioGroup)
         buttonNext = findViewById(R.id.nextButton)
         progress = findViewById(R.id.progressBar)
+        resultText = findViewById(R.id.resultText)
     }
 
     override fun onCreate(savedInstanceState: Bundle?)
@@ -74,7 +76,9 @@ class MainActivity : AppCompatActivity()
         answer2.visibility = View.GONE
         answer3.visibility = View.GONE
         answer4.visibility = View.GONE
-        question.text = "Twój wynik: $result/${questionList.size}"
+        resultText.visibility = View.VISIBLE
+        question.visibility = View.GONE
+        resultText.text = "Twój wynik: $result/${questionList.size}"
         buttonNext.visibility = View.GONE
         progress.visibility = View.GONE
     }
