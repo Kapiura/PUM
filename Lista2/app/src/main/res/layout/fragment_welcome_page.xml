@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".WelcomePage">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50sp"
+        android:id="@+id/usernameWelcomeText"
+        android:text="Welcome username"
+        android:textSize="36sp"
+        android:gravity="center"
+        android:layout_marginTop="150sp"/>
+
+    <Button
+        android:layout_width="300sp"
+        android:layout_height="70sp"
+        android:id="@+id/logoutBtn"
+        android:shape="rectangle"
+        android:layout_gravity="center"
+        android:text="Logout"
+        android:textSize="30sp"/>
+
+</FrameLayout>

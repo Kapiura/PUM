@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Register">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50sp"
+        android:text="Register Panel"
+        android:textSize="36sp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:layout_marginTop="150sp"/>
+
+    <TextView
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:gravity="left"
+        android:layout_gravity="center"
+        android:text="Login:"
+        android:textSize="18sp" />
+
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:gravity="left"
+        android:layout_gravity="center"
+        android:text=""
+        android:id="@+id/loginPlaceholderReg"/>
+
+    <TextView
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:gravity="left"
+        android:layout_gravity="center"
+        android:text="Password:"
+        android:textSize="18sp" />
+
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="150dp"
+        android:gravity="left"
+        android:layout_gravity="center"
+        android:text=""
+        android:id="@+id/passPlaceholderReg"/>
+
+    <TextView
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="200dp"
+        android:gravity="left"
+        android:layout_gravity="center"
+        android:text="Repeat Password:"
+        android:textSize="18sp" />
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="250dp"
+        android:gravity="left"
+        android:layout_gravity="center"
+        android:text=""
+        android:id="@+id/rPassReg"/>
+
+    <Button
+        android:id="@+id/registerBtnReg"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="320dp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:text="Register"
+        android:textSize="25sp"/>
+
+</FrameLayout>
