@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@id/e1"
+        android:icon="@drawable/baseline_assignment_24"
+        android:title="Listy zadań" />
+    <item
+        android:id="@id/e2"
+        android:icon="@drawable/baseline_assessment_22"
+        android:title="Oceny" />
+</menu>
