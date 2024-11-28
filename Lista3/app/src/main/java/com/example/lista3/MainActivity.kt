@@ -16,18 +16,24 @@ class MainActivity : AppCompatActivity() {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
-        override fun onCreate(savedInstanceState: Bundle?) {
-            binding.recyclerView.apply {
-                adapter = WordListAdapter(wordList)
-                layoutManager = LinearLayoutManager(this@MainActivity)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(binding.root)
+
+        binding.recyclerView.apply {
+            adapter = WordListAdapter(wordList){
+                Toast.makeText(this@MainActivity, "Clicked + $it", Toast.LENGTH_SHORT).show()
             }
-            super.onCreate(savedInstanceState)
-            enableEdgeToEdge()
-            setContentView(R.layout.activity_main)
+            layoutManager = LinearLayoutManager(this@MainActivity)
+        }
+
+        enableEdgeToEdge()
+
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
     }
+
 }
