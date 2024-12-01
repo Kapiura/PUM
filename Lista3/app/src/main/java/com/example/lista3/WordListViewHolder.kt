@@ -1,6 +1,5 @@
 package com.example.lista3
 
-import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lista3.databinding.WordListItemBinding
 
@@ -10,7 +9,7 @@ class WordListViewHolder(
 ) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(item: String){
+    fun bind(item: String, s: String, s1: String, s2: String){
         binding.singleWord.text = item
     }
     init {

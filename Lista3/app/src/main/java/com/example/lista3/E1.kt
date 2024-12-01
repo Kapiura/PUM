@@ -12,10 +12,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lista3.databinding.ActivityMainBinding
 import com.example.lista3.databinding.FragmentE1Binding
+import androidx.navigation.Navigation
 
 class E1 : Fragment() {
-    private val wordList by lazy { MutableList(50) { "word $it" } }
-
     private var _binding: FragmentE1Binding? = null
     private val binding get() = _binding!!
 
@@ -30,8 +29,19 @@ class E1 : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.recyclerView.apply {
-            adapter = WordListAdapter(wordList) {
-                Toast.makeText(requireContext(), "Clicked: $it", Toast.LENGTH_SHORT).show()
+            adapter = WordListAdapter(ExerciseList.Companion.ExerciseListProvider.allExerciseLists) {clickedItem ->
+                val currentIndex = ExerciseList.Companion.ExerciseListProvider.allExerciseLists.indexOf(clickedItem)
+
+                val listCount = ExerciseList.Companion.ExerciseListProvider.allExerciseLists
+                    .subList(0, currentIndex+1)
+                    .count { it.subject == clickedItem.subject  }
+
+                val subList = ExerciseList.Companion.ExerciseListProvider.allExerciseLists.subList(0, currentIndex + 1)
+                val listCount2 = subList.count { it.subject == clickedItem.subject }
+
+                val subj = clickedItem.subject.name
+                val action = E1Directions.actionE1ToE3(subj, listCount2)
+                Navigation.findNavController(requireView()).navigate(action)
             }
             layoutManager = LinearLayoutManager(requireContext())
         }

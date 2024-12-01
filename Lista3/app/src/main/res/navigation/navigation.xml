@@ -9,7 +9,11 @@
         android:id="@+id/e1"
         android:name="com.example.lista3.E1"
         android:label="fragment_e1"
-        tools:layout="@layout/fragment_e1" />
+        tools:layout="@layout/fragment_e1" >
+        <action
+            android:id="@+id/action_e1_to_e3"
+            app:destination="@id/e3" />
+    </fragment>
     <fragment
         android:id="@+id/e2"
         android:name="com.example.lista3.E2"
@@ -19,5 +23,12 @@
         android:id="@+id/e3"
         android:name="com.example.lista3.E3"
         android:label="fragment_e3"
-        tools:layout="@layout/fragment_e3" />
+        tools:layout="@layout/fragment_e3" >
+    <argument
+        android:name="subject"
+        app:argType="string" />
+    <argument
+        android:name="listcount"
+        app:argType="integer" />
+    </fragment>
 </navigation>

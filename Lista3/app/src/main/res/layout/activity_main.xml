@@ -19,13 +19,13 @@
         tools:listitem="@layout/word_list_item" />
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/nav_host_fragment"
+        android:id="@+id/fragmentContainerView"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+            android:layout_height="0dp"
         app:defaultNavHost="true"
-        app:navGraph="@navigation/navigation"/>
+        android:layout_weight="1"
+        app:navGraph="@navigation/navigation"  />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav_view"
