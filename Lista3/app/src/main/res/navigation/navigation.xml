@@ -16,7 +16,7 @@
                 android:name="subject"
                 app:argType="string" />
             <argument
-                android:name="exerciseCount"
+                android:name="listCount"
                 app:argType="integer" />
             <argument
                 android:name="grade"
@@ -24,6 +24,9 @@
             <argument
                 android:name="exerciseContent"
                 app:argType="string" />
+            <argument
+                android:name="exerciseCount"
+                app:argType="integer" />
         </action>
     </fragment>
 
@@ -42,7 +45,6 @@
             android:id="@+id/action_e3_to_e1"
             app:destination="@id/e1">
         </action>
-
     </fragment>
 
 </navigation>

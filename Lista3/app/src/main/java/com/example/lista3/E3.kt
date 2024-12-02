@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lista3.databinding.FragmentE3Binding
 
@@ -26,10 +25,29 @@ class E3 : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Pobranie przekazanych argumentów
+        val subjectName = arguments?.getString("subject") ?: ""
+        val exerciseCount = arguments?.getInt("exerciseCount") ?: 0
+        val exerciseContent = arguments?.getString("exerciseContent") ?: ""
+
+        // Inicjalizacja RecyclerView
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        val exerciseLists = ExerciseList.Companion.ExerciseListProvider.allExerciseLists
-        exerciseListAdapter = ExerciseListAdapter(exerciseLists)
+        // Generowanie ExerciseList z odpowiednią liczbą zadań
+        val generatedExerciseList = ExerciseList(
+            exercises = MutableList(exerciseCount) { index ->
+                Exercise(content = "$exerciseContent ${index + 1}", points = (index + 1) * 10)
+            },
+            subject = Subject(subjectName),
+            grade = 5.0f
+        )
+
+        // Tworzymy listę ExerciseList, bo adapter oczekuje tego typu
+        val exerciseList = listOf(generatedExerciseList)
+
+        // Przypisanie adaptera
+        exerciseListAdapter = ExerciseListAdapter(exerciseList)
         binding.recyclerView.adapter = exerciseListAdapter
     }
 
@@ -38,7 +56,3 @@ class E3 : Fragment() {
         _binding = null
     }
 }
-
-
-
-

@@ -25,7 +25,7 @@ class ExerciseListAdapter(private var exerciseLists: List<ExerciseList>) : Recyc
 
     override fun onBindViewHolder(holder: ExerciseListViewHolder, position: Int) {
         val exerciseList = filteredExerciseLists[position]
-        val exercise = exerciseList.exercises[position % exerciseList.exercises.size]
+        val exercise = exerciseList.exercises[position] // Poprawka
 
         holder.bind(
             subject = "Zadanie ${position + 1}",
@@ -38,5 +38,3 @@ class ExerciseListAdapter(private var exerciseLists: List<ExerciseList>) : Recyc
         return filteredExerciseLists.sumOf { it.exercises.size }
     }
 }
-
-
