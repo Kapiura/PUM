@@ -16,8 +16,6 @@ import com.example.lista3.databinding.ActivityMainBinding
 import androidx.navigation.ui.setupActionBarWithNavController
 
 class MainActivity : AppCompatActivity() {
-    private val wordList by lazy { MutableList(50) { "word $it" } }
-
     private val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
@@ -33,8 +31,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(binding.root)
+        supportActionBar?.title = "Lista 3"
 
         binding.bottomNavView.setupWithNavController(navController)
+        setSupportActionBar(binding.toolbar)
+        val appBarConfiguration = AppBarConfiguration(setOf(R.id.e1, R.id.e3))
+        setupActionBarWithNavController(navController, appBarConfiguration)
+        binding.bottomNavView.setupWithNavController(navController)
         }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp() || super.onSupportNavigateUp()
+    }
 
 }

@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,27 +7,35 @@
     <fragment
         android:id="@+id/e1"
         android:name="com.example.lista3.E1"
-        android:label="fragment_e1"
-        tools:layout="@layout/fragment_e1" >
+        android:label="Lista zadań"
+        tools:layout="@layout/fragment_e1">
         <action
             android:id="@+id/action_e1_to_e3"
-            app:destination="@id/e3" />
+            app:destination="@id/e3">
+            <argument
+                android:name="subject"
+                app:argType="string" />
+            <argument
+                android:name="exerciseCount"
+                app:argType="integer" />
+            <argument
+                android:name="grade"
+                app:argType="float" />
+            <argument
+                android:name="exerciseContent"
+                app:argType="string" />
+        </action>
     </fragment>
+
     <fragment
         android:id="@+id/e2"
         android:name="com.example.lista3.E2"
-        android:label="fragment_e2"
+        android:label="Oceny"
         tools:layout="@layout/fragment_e2" />
+
     <fragment
         android:id="@+id/e3"
         android:name="com.example.lista3.E3"
-        android:label="fragment_e3"
-        tools:layout="@layout/fragment_e3" >
-    <argument
-        android:name="subject"
-        app:argType="string" />
-    <argument
-        android:name="listcount"
-        app:argType="integer" />
-    </fragment>
+        android:label="Szczegóły zadań"
+        tools:layout="@layout/fragment_e3" />
 </navigation>

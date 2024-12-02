@@ -5,12 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
+import android.widget.Toolbar
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.lista3.databinding.ActivityMainBinding
 import com.example.lista3.databinding.FragmentE1Binding
 import androidx.navigation.Navigation
 
@@ -28,20 +25,21 @@ class E1 : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         binding.recyclerView.apply {
-            adapter = WordListAdapter(ExerciseList.Companion.ExerciseListProvider.allExerciseLists) {clickedItem ->
+            adapter = WordListAdapter(ExerciseList.Companion.ExerciseListProvider.allExerciseLists) { clickedItem ->
                 val currentIndex = ExerciseList.Companion.ExerciseListProvider.allExerciseLists.indexOf(clickedItem)
 
                 val listCount = ExerciseList.Companion.ExerciseListProvider.allExerciseLists
-                    .subList(0, currentIndex+1)
-                    .count { it.subject == clickedItem.subject  }
-
-                val subList = ExerciseList.Companion.ExerciseListProvider.allExerciseLists.subList(0, currentIndex + 1)
-                val listCount2 = subList.count { it.subject == clickedItem.subject }
+                    .subList(0, currentIndex + 1)
+                    .count { it.subject == clickedItem.subject }
 
                 val subj = clickedItem.subject.name
-                val action = E1Directions.actionE1ToE3(subj, listCount2)
-                Navigation.findNavController(requireView()).navigate(action)
+                val grade = clickedItem.grade
+                val exerciseContent = clickedItem.exercises[currentIndex].content
+
+                val action = E1Directions.actionE1ToE3(subj, listCount, grade, exerciseContent)
+                findNavController().navigate(action)
             }
             layoutManager = LinearLayoutManager(requireContext())
         }
@@ -52,4 +50,3 @@ class E1 : Fragment() {
         _binding = null
     }
 }
-

@@ -9,8 +9,11 @@ class WordListViewHolder(
 ) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(item: String, s: String, s1: String, s2: String){
-        binding.singleWord.text = item
+    fun bind(subject: String, listName: String, taskCount: String, grade: String){
+        binding.subjectName.text = subject
+        binding.listName.text = listName
+        binding.taskCount.text = taskCount
+        binding.grade.text = grade
     }
     init {
         itemView.setOnClickListener {

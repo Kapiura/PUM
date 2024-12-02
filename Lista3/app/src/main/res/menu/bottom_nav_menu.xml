@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@id/e1"
         android:icon="@drawable/baseline_assignment_24"
-        android:title="Listy zadań" />
+        android:title="Listy zadań"
+        app:destination="@id/e1" />
     <item
         android:id="@id/e2"
         android:icon="@drawable/baseline_assessment_22"
-        android:title="Oceny" />
+        android:title="Oceny"
+        app:destination="@id/e2"/>
 </menu>
