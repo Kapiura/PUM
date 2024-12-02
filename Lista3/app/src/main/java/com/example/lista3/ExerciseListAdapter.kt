@@ -9,14 +9,13 @@ class ExerciseListAdapter(private var exerciseLists: List<ExerciseList>) : Recyc
 
     private var filteredExerciseLists: List<ExerciseList> = exerciseLists
 
-    // Funkcja do filtrowania po nazwie przedmiotu i numerze zadania
     fun filter(subjectName: String? = null, taskNumber: Int? = null) {
         filteredExerciseLists = exerciseLists.filter { exerciseList ->
             val isSubjectMatching = subjectName?.let { exerciseList.subject.name.contains(it, ignoreCase = true) } ?: true
             val isTaskNumberMatching = taskNumber?.let { taskNumber <= exerciseList.exercises.size } ?: true
             isSubjectMatching && isTaskNumberMatching
         }
-        notifyDataSetChanged()  // Zaktualizowanie widoku po filtrze
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExerciseListViewHolder {

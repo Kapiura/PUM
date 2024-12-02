@@ -37,5 +37,12 @@
         android:id="@+id/e3"
         android:name="com.example.lista3.E3"
         android:label="Szczegóły zadań"
-        tools:layout="@layout/fragment_e3" />
+        tools:layout="@layout/fragment_e3">
+        <action
+            android:id="@+id/action_e3_to_e1"
+            app:destination="@id/e1">
+        </action>
+
+    </fragment>
+
 </navigation>
