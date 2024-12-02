@@ -15,14 +15,19 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Pobranie NavHostFragment
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         val navController = navHostFragment.navController
 
+        // Ustawienie toolbar
         setSupportActionBar(binding.toolbar)
-
         NavigationUI.setupActionBarWithNavController(this, navController)
 
+        // Powiązanie BottomNavigationView z NavController
+        NavigationUI.setupWithNavController(binding.bottomNavView, navController)
+
+        // Dodanie listenera na zmiany destynacji
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if (destination.id == R.id.e1 || destination.id == R.id.e3) {
                 supportActionBar?.setDisplayHomeAsUpEnabled(true)
