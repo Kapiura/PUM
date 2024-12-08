@@ -42,7 +42,8 @@ class WordListAdapter(
                     subjectName,
                     listNumber,
                     grade,
-                    content
+                    content,
+                    exercisesNumber
                 )
                 Navigation.findNavController(holder.itemView).navigate(action)
             }
