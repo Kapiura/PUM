@@ -1,10 +1,6 @@
 package com.example.lista6
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.Intent
-import android.content.Intent.CATEGORY_BROWSABLE
-import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,51 +8,30 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.Button
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -72,8 +47,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            genExList();
-            sumEx();
+            ExerciseList.genExList();
+            Grades.sumEx();
             Navigation(Modifier)
         }
     }
@@ -93,12 +68,66 @@ data class Grades (
     val average: Double,
     val appearances: Int
 )
+{
+    companion object
+    {
+        fun sumEx(): MutableList<Grades>
+        {
+            for (i in 0..4)
+            {
+                var sum = 0.0;
+                var counter = 0;
+                for(k in 0..19)
+                {
+                    if(exList[k].subject.name == Subjects[i].name)
+                    {
+                        sum += exList[k].grade;
+                        counter++;
+                    }
+                }
+                var avg = 0.0;
+                if(counter > 0)
+                {
+                    avg = sum / counter;
+                }
+                sumGrades.add(Grades(Subjects[i], avg, counter))
+            }
+            sumGrades.removeAll { it.appearances == 0 }
+            return sumGrades
+        }
+    }
+}
 
 data class ExerciseList (
     val exercises: MutableList<Exercise>,
     val subject: Subject,
     val grade: Float,
 )
+{
+    companion object
+    {
+        fun genExList()
+        {
+            for (i in 1..20)
+            {
+                val ex = MutableList(Random.nextInt(1,10))
+                {
+                    Exercise(
+                        content = "loremus ipsusum",
+                        points = Random.nextInt(1,10)
+                    )
+                }
+                exList.add(
+                    ExerciseList(
+                        exercises = ex,
+                        subject = Subjects[Random.nextInt(0,Subjects.size)],
+                        grade = (Random.nextInt(6, 11)).toFloat()/2
+                    )
+                )
+            }
+        }
+    }
+}
 
 val Subjects = mutableListOf(
     Subject("Matematyka"),
@@ -125,52 +154,6 @@ sealed class BottomBar(
     data object E2: BottomBar(Screens.E2.route, "Grades", Icons.Default.Info)
 }
 
-fun genExList()
-{
-    for (i in 1..20)
-    {
-        val ex = MutableList(Random.nextInt(1,10))
-        {
-            Exercise(
-                content = "loremus ipsusum",
-                points = Random.nextInt(1,10)
-            )
-        }
-        exList.add(
-            ExerciseList(
-                exercises = ex,
-                subject = Subjects[Random.nextInt(0,Subjects.size)],
-                grade = (Random.nextInt(6, 11)).toFloat()/2
-            )
-        )
-    }
-}
-
-fun sumEx(): MutableList<Grades>
-{
-    for (i in 0..4)
-    {
-        var sum = 0.0;
-        var counter = 0;
-        for(k in 0..19)
-        {
-            if(exList[k].subject.name == Subjects[i].name)
-            {
-                sum += exList[k].grade;
-                counter++;
-            }
-        }
-        var avg = 0.0;
-        if(counter > 0)
-        {
-            avg = sum / counter;
-        }
-        sumGrades.add(Grades(Subjects[i], avg, counter))
-    }
-    sumGrades.removeAll { it.appearances == 0 }
-    return sumGrades
-}
-
 val exList = mutableListOf<ExerciseList>()
 val sumGrades = mutableListOf<Grades>()
 
@@ -185,30 +168,6 @@ fun Navigation(modifier: Modifier = Modifier){
     )
 }
 
-
-//
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Composable
-//fun ActionBarMenu(navController: NavHostController){
-//
-//    var displayMenu by remember { mutableStateOf(false) }
-//
-//    TopAppBar(
-//        title = {Text("Navigation App", color = Color.Black) },
-//        actions = {
-//            IconButton(onClick = { displayMenu = !displayMenu }) {
-//                Icon(Icons.Default.MoreVert, "more")
-//            }
-//            DropdownMenu(
-//                expanded = displayMenu,
-//                onDismissRequest = { displayMenu = false }
-//            ){
-//                DropdownMenuItem(text = { Text(text = "Settings") }, onClick = { navController.navigate(Screens.SettingsPage.route) })
-//            }
-//        }
-//    )
-//}
-//
 @Composable
 fun NavGraph(navController: NavHostController, modifier: Modifier){
     NavHost(
@@ -236,7 +195,7 @@ fun NavGraph(navController: NavHostController, modifier: Modifier){
         }
     }
 }
-//
+
 @Composable
 fun BottomMenu(navController: NavHostController)
 {
@@ -435,76 +394,3 @@ fun E3(it: Int) {
         }
     }
 }
-
-//
-//@Composable
-//fun SettingsPage(){
-//    Box(
-//        Modifier
-//            .fillMaxSize()
-//            .background(Color.Red),
-//        contentAlignment = Alignment.Center
-//    ) {
-//        Text(
-//            text = "Settings Screen",
-//            fontSize = 40.sp
-//        )
-//    }
-//}
-//
-//@Composable
-//fun ListOfWords(){
-//    LazyColumn{
-//        items(50){
-//            var word by remember {
-//                mutableStateOf("word $it")
-//            }
-//            Text(
-//                text = word,
-//                fontSize = 32.sp,
-//                textAlign = TextAlign.Center,
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(2.dp)
-//                    .clickable { word += "Clicked!!!" }
-//            )
-//        }
-//    }
-//}
-//
-//
-//@Composable
-//fun E1(){
-//
-//    LazyColumn{
-//        items(50){
-//            var word by remember {
-//                mutableStateOf("word $it")
-//            }
-//            Text(
-//                text = word,
-//                fontSize = 32.sp,
-//                textAlign = TextAlign.Center,
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(2.dp)
-//                    .clickable { word += "Clicked!!!" }
-//            )
-//        }
-//    }
-//}
-//
-//@Composable
-//fun E2(){
-//    Box(
-//        Modifier
-//            .fillMaxSize()
-//            .background(Color.Red),
-//        contentAlignment = Alignment.Center
-//    ) {
-//        Text(
-//            text = "e2",
-//            fontSize = 40.sp
-//        )
-//    }
-//}
