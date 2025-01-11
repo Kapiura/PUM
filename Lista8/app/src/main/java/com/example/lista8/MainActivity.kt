@@ -16,12 +16,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -177,71 +182,269 @@ class GradeViewModelFactory(private val repo: GradeRepo): ViewModelProvider.Fact
 
 //main
 @Composable
-fun main(nav: NavController, viewModel: GradeViewModel)
-{
+fun main(nav: NavController, viewModel: GradeViewModel) {
     val grades by viewModel.allGrades.collectAsState(initial = emptyList())
 
+    val averageGrade = if (grades.isNotEmpty())
+    {
+        grades.map { it.gradeValue }.average()
+    } else {
+        0.0
+    }
+
     Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxWidth()
-    ){
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
         Text(
-            "Moje Oceny",
-            modifier = Modifier
-                .fillMaxWidth(),
-            textAlign = TextAlign.Center
+            text = "Moje Oceny",
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center,
+            fontSize = 24.sp
         )
         LazyColumn(
-            modifier = Modifier.fillMaxWidth()
-        ){
-            items(grades){ grade ->
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+        ) {
+            items(grades) { grade ->
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(5.dp)
                         .background(color = Color.hsl(59F, 0.21F, 0.53F))
                         .clickable { nav.navigate("edit/${grade.id}") }
-                        .padding(30.dp),
-                ){
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                text = "${grade.subjectName}",
-                                fontSize = 20.sp
-                            )
-                            Text(
-                                text = "${grade.gradeValue}",
-                                fontSize = 20.sp)
-                        }
+                        .padding(30.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = grade.subjectName,
+                            fontSize = 20.sp
+                        )
+                        Text(
+                            text = grade.gradeValue.toString(),
+                            fontSize = 20.sp
+                        )
+                    }
                 }
             }
         }
-        Button(
-            onClick = nav.navigate("add"),
-            modifier = Modifier.padding(top = 15.dp)
+        Text(
+            text = "Średnia ocen: ${"%.2f".format(averageGrade)}",
+            fontSize = 18.sp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp),
+            textAlign = TextAlign.Center
         )
-        {
-            Text("Dodaj nowa ocene")
+        Button(
+            onClick = { nav.navigate("add") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+        ) {
+            Text("Dodaj nową ocenę")
         }
     }
 }
 
+
 // add
 @Composable
-fun add(nav: NavController, viewModel: GradeViewModel)
-{
-    Text("add fun")
+fun add(nav: NavController, viewModel: GradeViewModel) {
+    var subjectName by remember { mutableStateOf("") }
+    var gradeValue by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.SpaceBetween,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "Dodaj nową ocenę",
+            fontSize = 24.sp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp),
+            textAlign = TextAlign.Center
+        )
+
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            TextField(
+                value = subjectName,
+                onValueChange = { subjectName = it },
+                label = { Text("Nazwa przedmiotu") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp)
+            )
+
+            TextField(
+                value = gradeValue,
+                onValueChange = { gradeValue = it },
+                label = { Text("Ocena (2.0 - 5.0)") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp),
+                isError = errorMessage != null
+            )
+
+            if (errorMessage != null) {
+                Text(
+                    text = errorMessage ?: "",
+                    color = Color.Red,
+                    fontSize = 14.sp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp)
+                )
+            }
+        }
+
+        Button(
+            onClick = {
+                val grade = gradeValue.toDoubleOrNull()
+                if (grade == null || grade !in 2.0..5.0 || grade == 2.5) {
+                    errorMessage = "Ocena musi być liczbą od 2.0 do 5.0."
+                } else if (subjectName.isBlank()) {
+                    errorMessage = "Nazwa przedmiotu nie może być pusta."
+                } else {
+                    errorMessage = null
+                    viewModel.insert(Grade(subjectName = subjectName, gradeValue = grade))
+                    nav.navigate("main")
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+        ) {
+            Text("Dodaj")
+        }
+    }
 }
 
 // editus
 @Composable
-fun edit(nav: NavController, viewModel: GradeViewModel, id: Int?)
-{
-    Text("edit fun")
+fun edit(nav: NavController, viewModel: GradeViewModel, id: Int?) {
+    if (id == null) {
+        Text("Nieprawidłowe ID")
+        return
+    }
+
+    val grades by viewModel.allGrades.collectAsState(initial = emptyList())
+    val grade = grades.find { it.id == id }
+
+    if (grade == null) {
+        Text("Ocena o podanym ID nie istnieje")
+        return
+    }
+
+    var subjectName by remember { mutableStateOf(grade.subjectName) }
+    var gradeValue by remember { mutableStateOf(grade.gradeValue.toString()) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.SpaceBetween,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "Edytuj ocenę",
+            fontSize = 24.sp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp),
+            textAlign = TextAlign.Center
+        )
+
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            TextField(
+                value = subjectName,
+                onValueChange = { subjectName = it },
+                label = { Text("Nazwa przedmiotu") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp)
+            )
+
+            TextField(
+                value = gradeValue,
+                onValueChange = { gradeValue = it },
+                label = { Text("Ocena (2.0 - 5.0)") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp),
+                isError = errorMessage != null
+            )
+
+            if (errorMessage != null) {
+                Text(
+                    text = errorMessage ?: "",
+                    color = Color.Red,
+                    fontSize = 14.sp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp)
+                )
+            }
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Button(
+                onClick = {
+                    val newGradeValue = gradeValue.toDoubleOrNull()
+                    if (newGradeValue == null || newGradeValue !in 2.0..5.0) {
+                        errorMessage = "Ocena musi być liczbą od 2.0 do 5.0."
+                    } else if (subjectName.isBlank()) {
+                        errorMessage = "Nazwa przedmiotu nie może być pusta."
+                    } else {
+                        errorMessage = null
+                        viewModel.update(
+                            Grade(id = grade.id, subjectName = subjectName, gradeValue = newGradeValue)
+                        )
+                        nav.navigate("main")
+                    }
+                },
+                modifier = Modifier.weight(1f).padding(end = 8.dp)
+            ) {
+                Text("Zmień")
+            }
+
+            Button(
+                onClick = {
+                    viewModel.delete(grade)
+                    nav.navigate("main")
+                },
+                modifier = Modifier.weight(1f).padding(start = 8.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
+            ) {
+                Text("Usuń")
+            }
+        }
+    }
 }
+
 
 // menu navigatus
 @Composable
