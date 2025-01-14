@@ -7,4 +7,6 @@
 - [x] ~~Lista5~~
 - [x] Lista6 10/10
 - [x] Lista7 10/10
-- [ ] Lista8
+- [x] Lista8 10/10
+
+Ocena : 4.5
